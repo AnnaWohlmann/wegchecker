@@ -1,0 +1,10 @@
+To whom it may concern,
+
+a collective of local citizens would like to inform you of an issue of one of the bike lanes in the district you are responsible for.
+A total of {nr_users} used the application "Wegchecker" to report the issue {issue_tag} at the location {location}. 
+Wegchecker is an app with the goal to improve bike lanes safety and usability to make biking more pleasant for the people and thus reduce car traffic.
+Make your municipality more climate friendly and your streets more safe by addressing this issue!
+Thank you very much for your cooperation.
+We would highly appreciate it if you could answer to this email as soon as the municipality fixes the mentioned issue.
+
+Your Wegchecker Team
