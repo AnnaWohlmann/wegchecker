@@ -1,0 +1,8 @@
+avatar_levels = {
+  "animal": "pig",
+  "level": "base",
+  "image": pig.jpg,
+  "animal": "pig",
+  "level": "guardian",
+  "image": pig_guardian.jpg
+}
