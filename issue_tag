@@ -1,0 +1,23 @@
+issue_tags = ["bike path not available",
+               "bike path not available in intersection",
+              "bike path not wide enough for two-way path",
+              "bike path not wide enough for bicycle trailer",
+              "pavement quality low - material",
+              "pavement quality low - cracks",
+              "to close to parking cars"
+              "parking cars on bike path",
+              "to close to driving cars/ tracks",
+              "tracks crossing bike path"
+              "high car traffic",
+              "shared bike and pedestrian path with many users",
+              "high bike traffic",
+              "unsafe intersection",
+              "unsafe road crossing",
+              "illumination low",
+              "no illumination",
+              "dirt on track",
+              "items/barriers on track",
+              "plants growing on track",
+              "steep slope",
+              "high waiting time at traffic signal",
+              "section which doesn't allow bike riding"]
