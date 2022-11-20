@@ -1,4 +1,7 @@
 import mysql.connector 
+from csv import reader
+
+OSM_COUNTER = 0
 
 # Database details
 mydb = mysql.connector.connect(
@@ -25,6 +28,82 @@ def get_user_by_name(username):
     }
     return user
 
+# Only for ease of access later. Not used by the app.
+# Reads the csv file into the database
+def init_osm_issue_db():
+    global OSM_COUNTER
+    sql = "insert into osm_issues (db_id, image_id, longitude, latitude, osm_way_id, current_classif, correction_classif, reports_no) values (%s, %s, %s, %s, %s, %s, %s, %s)"
+
+    with open('../resources/issues.csv', 'r') as read_obj:
+        csv_reader = reader(read_obj)
+        for row in csv_reader:
+            correction = 'primary'
+            if row[4] == 'primary':
+                correction = 'footwalk'
+            vals = (OSM_COUNTER, row[0], row[1], row[2], row[3], row[4], correction, 1)
+            mycursor.execute(sql, vals)
+            OSM_COUNTER += 1
+    mydb.commit()
+
+def get_all_osm_issues():
+    sql = "select * from osm_issues"
+    mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+
+    if myresult == []:
+        return []
+
+    issues = []
+    for row in myresult:
+        issues.append({
+            'db_id': row[0],
+            'image_id': row[1],
+            'longitude': row[2],
+            'latitude': row[3],
+            'osm_way_id': row[4],
+            'current_classif': row[5],
+            'correction_classif': row[6],
+            'reports_no': row[7]
+        })
+
+    return issues
+
+def get_osm_issue_by_id(id):
+    sql = "select * from osm_issues where db_id = '" + id + "'"
+    mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+    # User does not exist
+    if myresult == []:
+        return {}
+    
+    issue = {
+        'db_id': myresult[0][0],
+        'image_id': myresult[0][1],
+        'longitude': myresult[0][2],
+        'latitude': myresult[0][3],
+        'osm_way_id': myresult[0][4],
+        'current_classif': myresult[0][5],
+        'correction_classif': myresult[0][6],
+        'reports_no': myresult[0][7]
+    }
+    return issue
+
+def update_osm_issue_counter(id):
+    issue = get_osm_issue_by_id(id)
+    sql = "update osm_issues set reports_no = %s where db_id = %s"
+    vals = (issue['reports_no'] + 1, id)
+    mycursor.execute(sql, vals)
+    mydb.commit()
+    return issue
+
+def update_user_osm_score(username):
+    user = get_user_by_name(username)
+    sql = "update users set score_osm = %s where username = %s"
+    vals = (user['score_osm'] + 1, username)
+    mycursor.execute(sql, vals)
+    mydb.commit()
+    return user['score_osm'] + 1
+
 # CREATE DATABASE wegchecker
 # USE wegchecker
 
@@ -38,3 +117,14 @@ def get_user_by_name(username):
 
 # Default user
 # insert into users (username, email, score_osm, score_bike, avatar) values ("aster", "chireamihaela99@gmail.com", 0, 0, "avatars/cat.jpg");
+
+# CREATE TABLE osm_issues(
+#     db_id INT PRIMARY KEY,
+#     image_id VARCHAR(255),
+#     longitude VARCHAR(255),
+#     latitude VARCHAR(255),
+#     osm_way_id VARCHAR(255),
+#     current_classif VARCHAR(255),
+#     correction_classif VARCHAR(255),
+#     reports_no INT
+#     );
