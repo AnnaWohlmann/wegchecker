@@ -27,3 +27,21 @@ def home():
 @app.route('/profile/<username>', methods = ['GET'])
 def profile(username):
     return (json.dumps(dbOps.get_user_by_name(username)), 200)
+
+# Returns list of objects with the following structure:
+# {
+#     'db_id': int,
+#     'image_id': string,
+#     'longitude': string,
+#     'latitude': string,
+#     'osm_way_id': string,
+#     'current_classif': string,
+#     'correction_classif': string,
+#     'reports_no': int
+# }
+@app.route('/osm', methods=['GET'])
+def osmIssues():
+    return (json.dumps(dbOps.get_all_osm_issues()), 200)
+
+# Only run to fill in the osm_issues database
+# dbOps.init_osm_issue_db()
