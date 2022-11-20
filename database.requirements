@@ -1,0 +1,13 @@
+https://www.w3schools.com/python/python_mysql_getstarted.asp
+C:\Users\Your Name\AppData\Local\Programs\Python\Python36-32\Scripts>python -m pip install mysql-connector-python 
+
+mysql-client
+mysql-server
+
+
+https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql
+sudo mysql
+create user 'aster'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'aster'@'localhost' WITH GRANT OPTION;
+
+
