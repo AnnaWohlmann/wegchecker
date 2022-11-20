@@ -1,2 +1,7 @@
 __pycache__/
 *.py[cod]
+data/Huwawi
+/node_modules
+
+estimator.log
+config.yaml
