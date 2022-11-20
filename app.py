@@ -1,9 +1,11 @@
 from flask import Flask, redirect, url_for, request, render_template
 # from models.autogluon.main import train, predict
 import lib.db_ops as dbOps
+import lib.email_wrap as email
 import json
 
 app = Flask(__name__)
+REPORT_LIMIT = 10
 
 # @app.route("/model")
 # def train_model():
@@ -42,6 +44,20 @@ def profile(username):
 @app.route('/osm', methods=['GET'])
 def osmIssues():
     return (json.dumps(dbOps.get_all_osm_issues()), 200)
+
+# Returns only 1 object of the type mentioned above
+@app.route('/osm/<id>', methods = ['GET'])
+def getOsmIssue(id):
+    return (json.dumps(dbOps.get_osm_issue_by_id(id)), 200)
+
+@app.route('/osm/<id>/validate/<username>', methods = ['GET'])
+def validateOsmIssue(id, username):
+    issue = dbOps.update_osm_issue_counter(id)
+    dbOps.update_user_osm_score(username)
+
+    # Send email when we get enough reports
+    if issue['report_no'] + 1 >= REPORT_LIMIT:
+        email.sendEmail(email.mailSubject, email.fillInEmailBody(issue['report_no']+1, "Classification error", "lat=%s lon=%s"%(issue['latitude'], issue['longitude'])))
 
 # Only run to fill in the osm_issues database
 # dbOps.init_osm_issue_db()

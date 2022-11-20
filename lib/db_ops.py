@@ -68,6 +68,42 @@ def get_all_osm_issues():
 
     return issues
 
+def get_osm_issue_by_id(id):
+    sql = "select * from osm_issues where db_id = '" + id + "'"
+    mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+    # User does not exist
+    if myresult == []:
+        return {}
+    
+    issue = {
+        'db_id': myresult[0][0],
+        'image_id': myresult[0][1],
+        'longitude': myresult[0][2],
+        'latitude': myresult[0][3],
+        'osm_way_id': myresult[0][4],
+        'current_classif': myresult[0][5],
+        'correction_classif': myresult[0][6],
+        'reports_no': myresult[0][7]
+    }
+    return issue
+
+def update_osm_issue_counter(id):
+    issue = get_osm_issue_by_id(id)
+    sql = "update osm_issues set reports_no = %s where db_id = %s"
+    vals = (issue['reports_no'] + 1, id)
+    mycursor.execute(sql, vals)
+    mydb.commit()
+    return issue
+
+def update_user_osm_score(username):
+    user = get_user_by_name(username)
+    sql = "update users set score_osm = %s where username = %s"
+    vals = (user['score_osm'] + 1, username)
+    mycursor.execute(sql, vals)
+    mydb.commit()
+    return user['score_osm'] + 1
+
 # CREATE DATABASE wegchecker
 # USE wegchecker
 
